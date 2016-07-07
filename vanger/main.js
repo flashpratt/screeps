@@ -4,7 +4,7 @@ var roleBuilder = require('role.builder');
 var roleMiner = require('role.miner');
 var roleRepair = require('role.repairer');
 var spawnWorkers = require('spawn');
-
+//var bic
 var HARVESTERS = 4;
 var UPGRADERS = 3;
 var BUILDERS = 2;
