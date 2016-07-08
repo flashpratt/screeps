@@ -15,7 +15,7 @@ var roleRepairbot = {
     }
     //if we are repairing, find nearest repair site, move to it and then repair
     if(creep.memory.task == 'repair'){
-      var repairTarget = creep.pos.findClosest(FIND_STRUCTURES, {
+      var repairTarget = creep.pos.findClosestByPath(FIND_STRUCTURES, {
         filter: function(object){
           if(object.hits > object.hitsMax / 2) {
             return false;
