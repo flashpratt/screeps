@@ -19,7 +19,7 @@ var buildCreeps = {
         }
 
         //count the number of builders and spawn up to a predefined number
-        var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder', task: 'none');
+        var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
     	console.log('Builders: ' + builders.length);
         if(builders.length < 2) {
             var newName = Game.spawns.SpawnA1.createCreep([MOVE, WORK, CARRY], undefined, {role: 'builder', task: 'none'});

@@ -7,7 +7,6 @@ var buildCreeps = require('build.creeps');
 module.exports.loop = function () {
 
     // Always place this memory cleaning code at the very top of your main loop!
-
     for(var name in Memory.creeps) {
         if(!Game.creeps[name]) {
             delete Memory.creeps[name];
@@ -15,12 +14,12 @@ module.exports.loop = function () {
         }
     }
 
-    //call our building module here:
+    //call our module for spawning creeps:
     buildCreeps.run();
 
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
-        
+
         if(creep.memory.role == 'harvester') {
             roleHarvester.run(creep);
         }
@@ -34,5 +33,5 @@ module.exports.loop = function () {
             roleStorekeeper.run(creep);
         }
     }
-    
+
 }
