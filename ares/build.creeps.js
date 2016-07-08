@@ -9,7 +9,12 @@ var buildCreeps = {
             var newName = Game.spawns.SpawnA1.createCreep([MOVE, WORK, CARRY], undefined, {role: 'harvester', task: 'none'});
             console.log('Spawning new harvester: ' + newName);
         }
-
+        //count the number of harvesters and spawn some super harvesters
+        var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
+        if(harvesters.length < 3) {
+            var newName = Game.spawns.SpawnA1.createCreep([MOVE,MOVE,WORK,WORK,CARRY], undefined, {role: 'harvester', task: 'none'});
+            console.log('Spawning new super harvester: ' + newName);
+        }
         //count the number of upgraders and spawn up to a predefined number
         var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
     	//console.log('Upgraders: ' + upgraders.length);
@@ -35,12 +40,12 @@ var buildCreeps = {
 
         //count the number of builders and spawn up to a predefined number
         var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
-    	//console.log('Builders: ' + builders.length);
+    	  //console.log('Builders: ' + builders.length);
         if(builders.length < 2) {
             var newName = Game.spawns.SpawnA1.createCreep([MOVE, WORK, CARRY], undefined, {role: 'builder', task: 'none'});
             console.log('Spawning new builder: ' + newName);
         }
-    }
+      }
 };
 
 module.exports = buildCreeps;
