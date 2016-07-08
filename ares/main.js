@@ -1,8 +1,9 @@
+var buildCreeps = require('build.creeps');
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
-var roleStorekeeper = require('role.storekeeper')
-var buildCreeps = require('build.creeps');
+var roleStorekeeper = require('role.storekeeper');
+var roleRepairbot = require('role.repairbot');
 
 module.exports.loop = function () {
 
@@ -31,6 +32,9 @@ module.exports.loop = function () {
         }
         if(creep.memory.role == 'storekeeper') {
             roleStorekeeper.run(creep);
+        }
+        if(creep.memory.role == 'repairbot') {
+            roleRepairbot.run(creep);
         }
     }
 

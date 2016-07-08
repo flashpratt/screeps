@@ -4,7 +4,6 @@ var roleRepairbot = {
 
   /** @param {Creep} creep **/
   run: function(creep) {
-    var sources = creep.room.find(FIND_SOURCES);
 
     //if we have no energy, set task to recharge
     if(creep.carry.energy === 0) {
@@ -29,11 +28,13 @@ var roleRepairbot = {
             creep.repair(repairTarget);
     };
 
-    if(creep.memory.task == 'recharge'){
-      if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(sources[0]);
+    //if we are recharging, find sources and harvest or move if out of range
+    if(creep.memory.task == 'recharge') {
+          var sources = creep.room.find(FIND_SOURCES);
+          if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+              creep.moveTo(sources[0]);
+          }
       }
-    }
   }
 
 };
