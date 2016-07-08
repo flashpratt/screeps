@@ -17,10 +17,12 @@ var roleRepairbot = {
     if(creep.memory.task == 'repair'){
       var repairTarget = creep.pos.findClosestByPath(FIND_STRUCTURES, {
         filter: function(object){
-          if(object.hits > object.hitsMax / 2) {
+          if(object.hits === object.hitsMax) {
             return false;
           }
-          return true;
+          if(object.hits < object.hitsMax) {
+            return true;
+          }
         }
 
       });

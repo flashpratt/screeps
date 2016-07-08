@@ -25,6 +25,14 @@ var buildCreeps = {
             console.log('Spawning new super upgrader: ' + newName);
         }
 
+        //count the number of repairbots and spawn up to a predefined number
+        var repairbots = _.filter(Game.creeps, (creep) => creep.memory.role == 'repairbot');
+    	//console.log('Builders: ' + builders.length);
+        if(repairbots.length < 2) {
+            var newName = Game.spawns.SpawnA1.createCreep([MOVE, WORK, CARRY], undefined, {role: 'repairbot', task: 'none'});
+            console.log('Spawning new repairbot: ' + newName);
+        }
+
         //count the number of builders and spawn up to a predefined number
         var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
     	//console.log('Builders: ' + builders.length);
