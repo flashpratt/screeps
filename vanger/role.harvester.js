@@ -8,6 +8,7 @@ var roleHarvester = {
                 creep.memory.harvesting = rng.random(sources)
                 //console.log("Chose " + creep.memory.harvesting)
             }
+            //if(creep.pos.)
             if(creep.harvest(sources[creep.memory.harvesting]) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(sources[creep.memory.harvesting]);
             }
@@ -24,9 +25,10 @@ var roleHarvester = {
                     }
             });
             if(targets.length > 0) {
-                var err = creep.transfer(targets[0], RESOURCE_ENERGY)
+                var next = creep.pos.findClosestByPath(targets)
+                var err = creep.transfer(next, RESOURCE_ENERGY)
                 if(err == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0]);
+                    creep.moveTo(next);
                 }
             }
         }

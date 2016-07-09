@@ -6,7 +6,6 @@
  * var mod = require('spawn');
  * mod.thing == 'a thing'; // true
  */
- var BASIC = [WORK,CARRY,MOVE]
 
 module.exports = {
 /** Spawn a harvester: Collects energy to storage **/
@@ -16,7 +15,7 @@ module.exports = {
                 if(j == ("Harvester" + i)) {
                 } else {
 					var x = Game.spawns.Spawn1.createCreep([WORK, CARRY, MOVE], "Harvester" + i, {role: 'harvester', harvesting: (i % 2)})
-					this.logError(x, 'harvester')
+					this.logError(x)
                 }
             }        
         }
@@ -29,7 +28,7 @@ module.exports = {
                 if(j == (crpName)) {
                 } else {
 					var x = Game.spawns.Spawn1.createCreep([WORK, CARRY, MOVE], crpName, {role: 'upgrader'})
-					this.logError(x, 'upgrader')
+					this.logError(x, crpName)
                 }
             }        
         }
@@ -42,7 +41,7 @@ module.exports = {
                 if(j == (crpName)) {
                 } else {
 					var x = Game.spawns.Spawn1.createCreep([WORK, CARRY, MOVE], crpName, {role: 'builder'})
-					this.logError(x, 'builder')
+					this.logError(x, crpName)
                 }
             }        
         }
@@ -54,8 +53,8 @@ module.exports = {
                 var crpName = "Miner" + i
                 if(j == (crpName)) {
                 } else {
-					var x = Game.spawns.Spawn1.createCreep([WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE], crpName, {role: 'miner', node: (i % 2)})
-					this.logError(x, 'miner')
+					var x = Game.spawns.Spawn1.createCreep([WORK, WORK, WORK, CARRY, MOVE], crpName, {role: 'miner', node: (i % 2)})
+					this.logError(x, crpName)
                 }
             }        
         }
@@ -67,35 +66,18 @@ module.exports = {
                 if(j == (crpName)) {
                 } else {
 					var x = Game.spawns.Spawn1.createCreep([WORK, CARRY, CARRY, MOVE, MOVE], crpName, {role: 'repair', repair: 0})
-					this.logError(x, 'repair')
+					this.logError(x, crpName)
                 }
             }        
         }
 	},
-	logError: function(x, role) {
-	    if( _.isString(x)) {
-			console.log("Spawned new " + x)
-	        Memory.pop++;
-	        switch(role) {
-                    case('harvester'):
-                        Memory.hs++
-                        break;
-                    case('builder'):
-                        Memory.bs++
-                        break;
-                    case('miner'):
-                        Memory.ms++
-                        break;
-                    case('upgrader'):
-                        Memory.us++
-                        break;
-                    case('repair'):
-                        Memory.rs++
-                        break;
-                    default:
-                    console.log("error on new unit count")
-                        break;
-                }
+	logError: function(x , crpName) {
+	    if( x == 0) {
+			console.log("Spawned new repair" + i)
+		} else if(x == -6 || x == -4) {
+			return;
+		} else {
+			console.log("Failed to create spawn " + x)
 		}
 	}
 };

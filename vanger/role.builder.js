@@ -28,7 +28,11 @@ var roleBuilder = {
 	    else {
 	        var next = creep.pos.findClosestByPath(FIND_SOURCES)
             if(creep.harvest(next) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(next);
+                creep.moveTo(next)
+                /*if(!creep.moveTo(next)) {
+                    creep.moveTo(Game.spawns.Spawn1)
+                    Game.spawns.Spawn1.transferEnergy(creep)
+                };*/
             }
 	    }
 	    return 0
