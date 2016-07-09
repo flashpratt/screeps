@@ -17,7 +17,6 @@ module.exports = {
         //remove old creeps from memory
         for(var name in Memory.creeps) {
             if(!Game.creeps[name]) {
-                console.log(name,Game.creeps, Memory.creeps, creep)
                 var creep = Memory.creeps[name]
                 switch(creep.role) {
                     case('harvester'):
@@ -39,7 +38,7 @@ module.exports = {
                     console.log('error on unit death')
                         break;
                 }
-                delete creep;
+                delete Memory.creeps[name];
                 Memory.pop--
                 console.log('Clearing non-existing creep memory:', name);
             }

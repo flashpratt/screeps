@@ -65,19 +65,19 @@ module.exports.loop = function () {
     }
     
     //Spawn new creeps
-	if (Memory.hs.length < HARVESTERS) {
+	if (Memory.hs < HARVESTERS) {
         spawnWorkers.harvester(Memory.hs)    	
 	}
-	else if(Memory.ms.length < MINERS) {
+	else if(Memory.ms < MINERS) {
 		spawnWorkers.miner(Memory.ms)   	
 	}
-	else if(Memory.us.length < UPGRADERS) {
+	else if(Memory.us < UPGRADERS) {
 	    spawnWorkers.upgrader(Memory.us)  	
 	}
-	else if(Memory.rs.length < REPAIRS) {
+	else if(Memory.rs < REPAIRS) {
 	    spawnWorkers.repair(Memory.rs)
 	}
-	else if((Memory.bs.length < BUILDERS) && (FIND_CONSTRUCTION_SITES > 0)) {
+	else if((Memory.bs < BUILDERS) && (FIND_CONSTRUCTION_SITES > 0)) {
 		spawnWorkers.builder(Memory.bs)    	
 	}
 
