@@ -6,17 +6,18 @@ var roleRepair = require('role.repairer');
 var spawnWorkers = require('spawn');
 var memUpdate = require('memory.update');
 
-var HARVESTERS = 4;
-var UPGRADERS = 4;
-var BUILDERS = 2;
+var HARVESTERS = 2;
+var UPGRADERS = 3;
+var BUILDERS = 1;
 var MINERS = 2;
-var REPAIRS = 2;
+var REPAIRS = 1;
 
 Memory.turn = 1
 Memory.pop = 0
 for(var i in Game.creeps) {Memory.pop++}
 
 module.exports.loop = function () {
+    memUpdate.collectDead() //Clear dead creeps IMMEDIATELY before doing any spawning/checking
     //Do low-latency map-updates to memory
     switch(Memory.turn) {
         case(1):
@@ -25,27 +26,51 @@ module.exports.loop = function () {
         case(2):
             break;
         case(3):
+            Memory.hs = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
+            Memory.us = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
+            Memory.bs = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
+            Memory.ms = _.filter(Game.creeps, (creep) => creep.memory.role == 'miner');
+            Memory.rs = _.filter(Game.creeps, (creep) => creep.memory.role == 'repair');
             break;
         case(4):
+            //Spawn new creeps
+            if (Memory.hs.length < HARVESTERS) {
+                spawnWorkers.harvester(Memory.hs)
+            }
+            else if(Memory.ms.length < MINERS) {
+            	spawnWorkers.miner(Memory.ms)
+            }
+            else if(Memory.us.length < UPGRADERS) {
+                spawnWorkers.upgrader(Memory.us)
+            }
+            else if(Memory.rs.length < REPAIRS) {
+                spawnWorkers.repair(Memory.rs)
+            }
+            else if((Memory.bs.length < BUILDERS) && (FIND_CONSTRUCTION_SITES > 0)) {
+            	spawnWorkers.builder(Memory.bs)
+            }
             break;
         case(5):
-            break;
-        case(6):
-            break;
-        case(7):
-            break;
-        case(8):
-            break;
-        case(9):
-            break;
-        case(10):
+        //    break;
+        //case(6):
+        //    break;
+        //case(7):
+        //    break;
+        //case(8):
+        //    break;
+        //case(9):
+        //    break;
+        //case(10):
             Memory.turn = 0;
             break;
         default:
             //Do nothing :(
             break;
     }
-    memUpdate.run()
+    for(var x in Game.creeps) {
+        Game.creeps[x].suicide
+    }
+    //console.log("rs " + Memory.rs.length + " us " + Memory.us.length + " hs " + Memory.hs.length + " ms " + Memory.ms.length + " bs " + Memory.bs.length)
     Memory.turn++;
 
     //tower AI
@@ -63,23 +88,6 @@ module.exports.loop = function () {
             tower.attack(closestHostile);
         }
     }
-    
-    //Spawn new creeps
-	if (Memory.hs < HARVESTERS) {
-        spawnWorkers.harvester(Memory.hs)    	
-	}
-	else if(Memory.ms < MINERS) {
-		spawnWorkers.miner(Memory.ms)   	
-	}
-	else if(Memory.us < UPGRADERS) {
-	    spawnWorkers.upgrader(Memory.us)  	
-	}
-	else if(Memory.rs < REPAIRS) {
-	    spawnWorkers.repair(Memory.rs)
-	}
-	else if((Memory.bs < BUILDERS) && (FIND_CONSTRUCTION_SITES > 0)) {
-		spawnWorkers.builder(Memory.bs)    	
-	}
 
     //Control creeps
     for(var name in Game.creeps) {

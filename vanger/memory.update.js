@@ -6,41 +6,36 @@
  * var mod = require('memory.update');
  * mod.thing == 'a thing'; // true
  */
-Memory.hs = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
-Memory.us = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
-Memory.bs = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
-Memory.ms = _.filter(Game.creeps, (creep) => creep.memory.role == 'miner');
-Memory.rs = _.filter(Game.creeps, (creep) => creep.memory.role == 'repair');
 
 module.exports = {
-    run: function() {
+    collectDead: function() {
         //remove old creeps from memory
         for(var name in Memory.creeps) {
             if(!Game.creeps[name]) {
                 var creep = Memory.creeps[name]
                 switch(creep.role) {
                     case('harvester'):
-                        Memory.hs--
+                        Memory.hs.pop(creep)
                         break;
                     case('builder'):
-                        Memory.bs--
+                        Memory.bs.pop(creep)
                         break;
                     case('miner'):
-                        Memory.ms--
+                        Memory.ms.pop(creep)
                         break;
                     case('upgrader'):
-                        Memory.us--
+                        Memory.us.pop(creep)
                         break;
                     case('repair'):
-                        Memory.rs--
+                        Memory.rs.pop(creep)
                         break;
                     default:
                     console.log('error on unit death')
                         break;
                 }
+                console.log('Clearing non-existing creep memory:', name);
                 delete Memory.creeps[name];
                 Memory.pop--
-                console.log('Clearing non-existing creep memory:', name);
             }
         }
     }

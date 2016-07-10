@@ -18,13 +18,25 @@ module.exports = {
 		if(creep.memory.repair) {
 			var roadToRepair = creep.room.find(FIND_STRUCTURES, {
                 filter: function(object){
-                    return object.structureType === STRUCTURE_ROAD && (object.hits < object.hitsMax / 2) || object.structureType === STRUCTURE_WALL && (object.hits < object.hitsMax);
+                    return ((object.structureType === STRUCTURE_ROAD && (object.hits < object.hitsMax * 0.9)) || (object.structureType === STRUCTURE_WALL && (object.hits < 1000)));
                 } 
             });
-            if (roadToRepair){
+            if (roadToRepair == null){
                 var X = creep.pos.findClosestByRange(roadToRepair)
                 if(creep.repair(X) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(X);   
+                }
+            } else {
+                var wallToRepair = creep.room.find(FIND_STRUCTURES, {
+                    filter: function(object){
+                        return object.structureType === STRUCTURE_WALL && (object.hits < object.hitsMax);
+                    } 
+                });
+                if(wallToRepair != null) {
+                    var X = creep.pos.findClosestByRange(wallToRepair)
+                    if(creep.repair(X) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(X);   
+                    }
                 }
             }
 		} else {

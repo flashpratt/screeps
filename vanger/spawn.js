@@ -7,70 +7,116 @@
  * mod.thing == 'a thing'; // true
  */
  var BASIC = [WORK,CARRY,MOVE]
+ //var CART = [CARRY, CARRY, MOVE, MOVE]    //WIP: make "cars" to carry energy between points?
 
 module.exports = {
-/** Spawn a harvester: Collects energy to storage **/
+    /** Spawn a harvester: Collects energy to storage **/
     harvester: function(currList) {	
-        for(var i = 0; i <= currList.length; i++) {
-            for(var j in Game.creeps) {
-                if(j == ("Harvester" + i)) {
-                } else {
-					var x = Game.spawns.Spawn1.createCreep([WORK, CARRY, MOVE], "Harvester" + i, {role: 'harvester', harvesting: (i % 2)})
-					this.logError(x, 'harvester')
-                }
-            }        
+        var i = Game.time % 100
+        var crpName = "Harvester" + i
+        var body = BASIC
+        for(var nrg = Memory.energy1 - 200; nrg > 100;) {
+            body.push(CARRY)
+            nrg -= 50
+            body.push(MOVE)
+            nrg -= 50
         }
+        if(nrg > 50) {
+            body.push(CARRY)
+        }
+		var x = Game.spawns.Spawn1.createCreep(body, crpName, {role: 'harvester', harvesting: (i % 2)})
+		this.logError(x, 'harvester')
     },
 	/** Spawn an upgrader: brings energy to Control Tower **/
     upgrader: function(currList) {
-        for(var i = 0; i <= currList.length; i++) {
-            for(var j in Game.creeps) {
-                var crpName = "Upgrader" + i
-                if(j == (crpName)) {
-                } else {
-					var x = Game.spawns.Spawn1.createCreep([WORK, CARRY, MOVE], crpName, {role: 'upgrader'})
-					this.logError(x, 'upgrader')
-                }
-            }        
+        var i = Game.time % 100
+        var crpName = "Upgrader" + i
+        var body = BASIC
+        var toggle = false
+        for(var nrg = Memory.energy1 - 200; nrg > 100;) {
+            if(toggle) {
+                body.push(WORK)
+                nrg -= 100
+            } else {
+                body.push(CARRY)
+                nrg -= 50
+                body.push(MOVE)
+                nrg -= 50
+            }
+            toggle = !toggle
         }
+        if(nrg > 50) {
+            body.push(MOVE)
+        }
+		var x = Game.spawns.Spawn1.createCreep(body, crpName, {role: 'upgrader'})
+		this.logError(x, 'upgrader')
     },
 	/** Spawn a builder: builds roads/buildings **/
     builder: function(currList) {
-        for(var i = 0; i <= currList.length; i++) {
-            for(var j in Game.creeps) {
-                var crpName = "Builder" + i
-                if(j == (crpName)) {
-                } else {
-					var x = Game.spawns.Spawn1.createCreep([WORK, CARRY, MOVE], crpName, {role: 'builder'})
-					this.logError(x, 'builder')
-                }
-            }        
+        var i = Game.time % 100
+        var crpName = "Builder" + i
+        var body = BASIC
+        var toggle = false
+        for(var nrg = Memory.energy1 - 200; nrg > 100;) {
+            if(toggle) {
+                body.push(WORK)
+                nrg -= 100
+            } else {
+                body.push(CARRY)
+                nrg -= 50
+                body.push(MOVE)
+                nrg -= 50
+            }
+            toggle = !toggle
         }
+        if(nrg > 50) {
+            body.push(MOVE)
+        }
+		var x = Game.spawns.Spawn1.createCreep(body, crpName, {role: 'builder', building: false})
+		this.logError(x, 'builder')
     },
 	/** Spawn a miner: mines really fast, then transfers to nearby bots **/
 	miner: function(currList) {
-		for(var i = 0; i <= currList.length; i++) {
-            for(var j in Game.creeps) {
-                var crpName = "Miner" + i
-                if(j == (crpName)) {
-                } else {
-					var x = Game.spawns.Spawn1.createCreep([WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE], crpName, {role: 'miner', node: (i % 2)})
-					this.logError(x, 'miner')
-                }
-            }        
+        var i = Game.time % 100
+        var crpName = "Miner" + i
+        var body = BASIC
+        var toggle = false
+        for(var nrg = Memory.energy1 - 200; nrg > 150;) {
+                body.push(WORK)
+                nrg -= 100
+                body.push(MOVE)
+                nrg -= 50
         }
+        if(nrg > 100) {
+            body.push(WORK)
+        } else if(nrg > 50) {
+            body.push(MOVE)
+        }
+		var x = Game.spawns.Spawn1.createCreep([WORK, WORK, CARRY, MOVE], crpName, {role: 'miner', node: (Memory.ms.length % 2)})
+		this.logError(x, 'miner')
 	},
 	repair: function(currList) {
-	    for(var i = 0; i <= currList.length; i++) {
-            for(var j in Game.creeps) {
-                var crpName ="Repair" + i
-                if(j == (crpName)) {
-                } else {
-					var x = Game.spawns.Spawn1.createCreep([WORK, CARRY, CARRY, MOVE, MOVE], crpName, {role: 'repair', repair: 0})
-					this.logError(x, 'repair')
-                }
-            }        
+        var i = Game.time % 100
+        var crpName = "Repair" + i
+        var body = BASIC
+        var toggle = false
+        for(var nrg = Memory.energy1 - 200; nrg > 100;) {
+            if(toggle) {
+                body.push(WORK)
+                nrg -= 100
+            } else {
+                body.push(CARRY)
+                nrg -= 50
+                body.push(MOVE)
+                nrg -= 50
+            }
+            toggle = !toggle
         }
+        if(nrg > 50) {
+            body.push(MOVE)
+        }
+		var x = Game.spawns.Spawn1.createCreep([WORK, CARRY, CARRY, MOVE, MOVE], crpName, {role: 'repair', repair: false})
+		this.logError(x, 'repair')
 	},
 	logError: function(x, role) {
 	    if( _.isString(x)) {
@@ -78,19 +124,19 @@ module.exports = {
 	        Memory.pop++;
 	        switch(role) {
                     case('harvester'):
-                        Memory.hs++
+                        Memory.hs.push(Game.creeps[x])
                         break;
                     case('builder'):
-                        Memory.bs++
+                        Memory.bs.push(Game.creeps[x])
                         break;
                     case('miner'):
-                        Memory.ms++
+                        Memory.ms.push(Game.creeps[x])
                         break;
                     case('upgrader'):
-                        Memory.us++
+                        Memory.us.push(Game.creeps[x])
                         break;
                     case('repair'):
-                        Memory.rs++
+                        Memory.rs.push(Game.creeps[x])
                         break;
                     default:
                     console.log("error on new unit count")
