@@ -6,11 +6,11 @@ var roleRepair = require('role.repairer');
 var spawnWorkers = require('spawn');
 var memUpdate = require('memory.update');
 
-var HARVESTERS = 2;
+var HARVESTERS = 4;
 var UPGRADERS = 3;
 var BUILDERS = 1;
 var MINERS = 2;
-var REPAIRS = 1;
+var REPAIRS = 2;
 
 Memory.turn = 1
 Memory.pop = 0
@@ -51,7 +51,10 @@ module.exports.loop = function () {
             }
             break;
         case(5):
-        //    break;
+            //Memory.containers
+            //var structures = Game.spawns.Spawn1.room.find(FIND_STRUCTURES)
+            //Memory.containers = _.filter(structures, function(structure) {return (structure.structureType === STRUCTURE_CONTAINER)})
+            //break;
         //case(6):
         //    break;
         //case(7):
@@ -66,9 +69,6 @@ module.exports.loop = function () {
         default:
             //Do nothing :(
             break;
-    }
-    for(var x in Game.creeps) {
-        Game.creeps[x].suicide
     }
     //console.log("rs " + Memory.rs.length + " us " + Memory.us.length + " hs " + Memory.hs.length + " ms " + Memory.ms.length + " bs " + Memory.bs.length)
     Memory.turn++;

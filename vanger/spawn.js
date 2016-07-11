@@ -7,6 +7,7 @@
  * mod.thing == 'a thing'; // true
  */
  var BASIC = [WORK,CARRY,MOVE]
+ var TRANS = [CARRY, MOVE]
  //var CART = [CARRY, CARRY, MOVE, MOVE]    //WIP: make "cars" to carry energy between points?
 
 module.exports = {
@@ -15,7 +16,12 @@ module.exports = {
         var i = Game.time % 100
         var crpName = "Harvester" + i
         var body = BASIC
-        for(var nrg = Memory.energy1 - 200; nrg > 100;) {
+        var baseCost = 200
+        if(Memory.ms.length > 0) {
+            var body = TRANS
+            baseCost = 100
+        }
+        for(var nrg = Memory.energy1 - baseCost; nrg > 100;) {
             body.push(CARRY)
             nrg -= 50
             body.push(MOVE)
@@ -78,7 +84,12 @@ module.exports = {
 	/** Spawn a miner: mines really fast, then transfers to nearby bots **/
 	miner: function(currList) {
         var i = Game.time % 100
-        var crpName = "Miner" + i
+        var node = 0
+        var crpName = "Miner" + node
+        if(crpName in Game.creeps) {
+            node = 1
+            crpName = "Miner" + node
+        }
         var body = BASIC
         var toggle = false
         for(var nrg = Memory.energy1 - 200; nrg > 150;) {
@@ -92,7 +103,7 @@ module.exports = {
         } else if(nrg > 50) {
             body.push(MOVE)
         }
-		var x = Game.spawns.Spawn1.createCreep([WORK, WORK, CARRY, MOVE], crpName, {role: 'miner', node: (Memory.ms.length % 2)})
+		var x = Game.spawns.Spawn1.createCreep([WORK, WORK, CARRY, MOVE], crpName, {role: 'miner', node: (node)})
 		this.logError(x, 'miner')
 	},
 	repair: function(currList) {

@@ -3,6 +3,22 @@ var roleHarvester = {
     /** @param {Creep} creep **/
     run: function(creep) {
 	    if(creep.carry.energy < creep.carryCapacity) {
+	        var dropped = creep.room.find(FIND_DROPPED_ENERGY, {filter: (orb) => {return (orb.energy > 0)}})
+	        if(dropped.length > 0) {
+	            next = creep.pos.findClosestByPath(dropped)
+	            creep.moveTo(next)
+	            creep.pickup(next)
+	            return
+	        }
+	        if(Memory.ms.length > 0) {
+	            if(creep.memory.provider == null) {
+	                creep.memory.provider = "Miner" + creep.name.substring(9) % Memory.ms.length
+	            }
+	            creep.moveTo(Game.creeps[creep.memory.provider])
+	            return
+	        } else {
+	            delete creep.memory.provider
+	        }
             var sources = creep.room.find(FIND_SOURCES);
             if(creep.harvest(sources[creep.memory.harvesting]) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(sources[creep.memory.harvesting]);

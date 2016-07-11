@@ -18,10 +18,10 @@ module.exports = {
 		if(creep.memory.repair) {
 			var roadToRepair = creep.room.find(FIND_STRUCTURES, {
                 filter: function(object){
-                    return ((object.structureType === STRUCTURE_ROAD && (object.hits < object.hitsMax * 0.9)) || (object.structureType === STRUCTURE_WALL && (object.hits < 1000)));
+                    return (object.structureType === STRUCTURE_ROAD && (object.hits < object.hitsMax * 0.9) || object.structureType === STRUCTURE_CONTAINER && (object.hits < object.hitsMax * 0.9));
                 } 
             });
-            if (roadToRepair == null){
+            if (roadToRepair != null){
                 var X = creep.pos.findClosestByRange(roadToRepair)
                 if(creep.repair(X) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(X);   

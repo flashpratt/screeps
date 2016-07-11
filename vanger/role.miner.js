@@ -16,13 +16,18 @@ var roleMiner = {
 				creep.moveTo(sources[creep.memory.node]);
 			}
 		}
-	//	creep.find(FIND_MY_CREEPS, {filter: function(object) {return object.memoryy.role == 'Harvester'}})
-	
+		
 	    var targets = creep.room.find(FIND_MY_CREEPS)
-		//var targets = _.filter(Game.creeps, {filter(object) {return (object.pos.x - creep.pos.x)}});
 		for(var x = 0; x < targets.length; x++) {
 		creep.transfer(targets[x], RESOURCE_ENERGY)
 		}
+		
+		
+		if(creep.memory.chest == null) {
+		    creep.memory.chest = creep.pos.findClosestByRange(FIND_STRUCTURES, {filter: {structureType: STRUCTURE_CONTAINER}}).id
+		} else {
+		    creep.transfer(Game.getObjectById(creep.memory.chest), RESOURCE_ENERGY)
+        }
 	}
 }
 module.exports = roleMiner;
