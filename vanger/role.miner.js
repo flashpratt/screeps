@@ -19,7 +19,7 @@ var roleMiner = {
 		
 	    var targets = creep.room.find(FIND_MY_CREEPS)
 		for(var x = 0; x < targets.length; x++) {
-		creep.transfer(targets[x], RESOURCE_ENERGY)
+		    creep.transfer(targets[x], RESOURCE_ENERGY)
 		}
 		
 		

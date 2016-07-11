@@ -6,7 +6,7 @@ var roleRepair = require('role.repairer');
 var spawnWorkers = require('spawn');
 var memUpdate = require('memory.update');
 
-var HARVESTERS = 4;
+var HARVESTERS = 3;
 var UPGRADERS = 3;
 var BUILDERS = 1;
 var MINERS = 2;
