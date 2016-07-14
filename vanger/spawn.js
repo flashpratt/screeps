@@ -11,6 +11,24 @@
  //var CART = [CARRY, CARRY, MOVE, MOVE]    //WIP: make "cars" to carry energy between points?
 
 module.exports = {
+    carrier: function(currList) {
+        var crpName
+        for(var i = 0; i <= currList.length; i++) {
+            crpName = "Carrier" + i
+            if(crpName in Game.creeps) {
+                if(i == currList.length) {
+                    return
+                }
+                continue;
+            } else {
+                break;
+            }
+        }
+            
+        var body = TRANS
+        var baseCost = 100
+        
+    },
     /** Spawn a harvester: Collects energy to storage **/
     harvester: function(currList) {	
         var i = Game.time % 100
@@ -30,7 +48,7 @@ module.exports = {
         if(nrg > 50) {
             body.push(CARRY)
         }
-		var x = Game.spawns.Spawn1.createCreep(body, crpName, {role: 'harvester', harvesting: (i % 2)})
+		var x = Game.spawns.Spawn1.createCreep(body, crpName, {role: 'harvester', harvesting: (true)})
 		this.logError(x, 'harvester')
     },
 	/** Spawn an upgrader: brings energy to Control Tower **/
@@ -39,21 +57,26 @@ module.exports = {
         var crpName = "Upgrader" + i
         var body = BASIC
         var toggle = false
-        for(var nrg = Memory.energy1 - 200; nrg > 100;) {
-            if(toggle) {
+        var nrg = Memory.energy1 - 200
+        while(nrg > 50) {
+            if( nrg > 100) {
                 body.push(WORK)
                 nrg -= 100
-            } else {
+            }
+            if(nrg > 50) {
                 body.push(CARRY)
                 nrg -= 50
+            }
+            if(nrg > 50) {
+                body.push(CARRY)
+                nrg -= 50
+            }
+            if(nrg > 50) {
                 body.push(MOVE)
                 nrg -= 50
             }
-            toggle = !toggle
         }
-        if(nrg > 50) {
-            body.push(MOVE)
-        }
+        
 		var x = Game.spawns.Spawn1.createCreep(body, crpName, {role: 'upgrader'})
 		this.logError(x, 'upgrader')
     },
@@ -92,15 +115,11 @@ module.exports = {
         }
         var body = BASIC
         var toggle = false
-        for(var nrg = Memory.energy1 - 200; nrg > 150;) {
+        for(var nrg = Memory.energy1 - 200; nrg > 100;) {
                 body.push(WORK)
                 nrg -= 100
-                body.push(MOVE)
-                nrg -= 50
         }
-        if(nrg > 100) {
-            body.push(WORK)
-        } else if(nrg > 50) {
+        if(nrg > 50) {
             body.push(MOVE)
         }
 		var x = Game.spawns.Spawn1.createCreep([WORK, WORK, CARRY, MOVE], crpName, {role: 'miner', node: (node)})

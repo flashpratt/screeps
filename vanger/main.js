@@ -22,8 +22,20 @@ module.exports.loop = function () {
     switch(Memory.turn) {
         case(1):
             Memory.energy1 = Game.spawns.Spawn1.room.energyAvailable
+            Memory.foundations = Game.spawns.Spawn1.room.find(Game.constructionSites)
+            var containers = Game.spawns.Spawn1.room.find(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] >= 500)
+                }
+            })
+            var array = []
+            for(i = 0; i < containers.length; i++) {
+                array.push(containers[i].id)
+            }
+            Memory.containers = array
             break;
         case(2):
+            Memory.cs = _.filter(Game.creeps, (creep) => creep.memory.role == 'carrier');
             break;
         case(3):
             Memory.hs = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
@@ -35,6 +47,11 @@ module.exports.loop = function () {
         case(4):
             //Spawn new creeps
             if (Memory.hs.length < HARVESTERS) {
+                if(Memory.ms.length < 1) {
+                    spawnWorkers.harvester(Memory.hs)
+                } else {
+                    //spawnWorkers.carrier(Memory.cs)
+                }
                 spawnWorkers.harvester(Memory.hs)
             }
             else if(Memory.ms.length < MINERS) {
@@ -46,7 +63,7 @@ module.exports.loop = function () {
             else if(Memory.rs.length < REPAIRS) {
                 spawnWorkers.repair(Memory.rs)
             }
-            else if((Memory.bs.length < BUILDERS) && (FIND_CONSTRUCTION_SITES > 0)) {
+            else if((Memory.bs.length < BUILDERS) /*&& (Memory.foundations.length > 0)*/) {
             	spawnWorkers.builder(Memory.bs)
             }
             break;

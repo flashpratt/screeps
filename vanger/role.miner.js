@@ -14,6 +14,8 @@ var roleMiner = {
 		if(creep.carry.energy < creep.carryCapacity) {
 			if(creep.harvest(sources[creep.memory.node]) == ERR_NOT_IN_RANGE){
 				creep.moveTo(sources[creep.memory.node]);
+			} else {
+			    creep.memory.setup = true
 			}
 		}
 		
@@ -22,12 +24,13 @@ var roleMiner = {
 		    creep.transfer(targets[x], RESOURCE_ENERGY)
 		}
 		
-		
-		if(creep.memory.chest == null) {
-		    creep.memory.chest = creep.pos.findClosestByRange(FIND_STRUCTURES, {filter: {structureType: STRUCTURE_CONTAINER}}).id
-		} else {
-		    creep.transfer(Game.getObjectById(creep.memory.chest), RESOURCE_ENERGY)
-        }
+		if(creep.memory.setup) {
+    		if(creep.memory.chest == null) {
+    		    creep.memory.chest = creep.pos.findClosestByRange(FIND_STRUCTURES, {filter: {structureType: STRUCTURE_CONTAINER}}).id
+    		} else {
+    		    creep.transfer(Game.getObjectById(creep.memory.chest), RESOURCE_ENERGY)
+            }
+		}
 	}
 }
 module.exports = roleMiner;

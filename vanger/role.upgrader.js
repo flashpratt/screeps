@@ -16,14 +16,16 @@ var roleUpgrader = {
             }
         }
         else {
-            var target = Game.getObjectById('578209037a5be3f24bcc413d')
-            if(target.transfer(creep, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(target)
+            if(Memory.containers.length > 0) {
+                var target = Game.getObjectById(Memory.containers[0])
+                if(creep.withdraw(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(target)
+                }
+                /*var sources = creep.room.find(FIND_SOURCES);
+                if(creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(sources[1]);
+                }*/
             }
-            /*var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[1]);
-            }*/
         }
 	}
 };

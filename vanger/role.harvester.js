@@ -2,7 +2,7 @@ var rng = require('math');
 var roleHarvester = {
     /** @param {Creep} creep **/
     run: function(creep) {
-	    if(creep.carry.energy < creep.carryCapacity) {
+	    if(creep.carry.energy < creep.carryCapacity && creep.memory.harvesting) {
 	        var dropped = creep.room.find(FIND_DROPPED_ENERGY, {filter: (orb) => {return (orb.energy > 0)}})
 	        if(dropped.length > 0) {
 	            next = creep.pos.findClosestByPath(dropped)
@@ -10,21 +10,34 @@ var roleHarvester = {
 	            creep.pickup(next)
 	            return
 	        }
-	        if(Memory.ms.length > 0) {
+	        if(Memory.containers.length > 0) {
 	            if(creep.memory.provider == null) {
-	                creep.memory.provider = "Miner" + creep.name.substring(9) % Memory.ms.length
+	                var range = 1000
+	                for(var i = 0; i < Memory.containers.length; i++) {
+	                    var chest = Game.getObjectById(Memory.containers[i])
+	                    var dist = creep.pos.getRangeTo(chest)
+	                    if(dist < range) {
+	                        dist = range
+	                        creep.memory.provider = chest.id
+	                    }
+	                }
+	            } else {
+	                var chest = Game.getObjectById(creep.memory.provider)
+	                if(creep.withdraw(chest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+	                    creep.moveTo(chest)
+	                }
 	            }
-	            creep.moveTo(Game.creeps[creep.memory.provider])
-	            return
 	        } else {
-	            delete creep.memory.provider
+                var sources = creep.room.find(FIND_SOURCES);
+                if(creep.harvest(sources[creep.memory.harvesting]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(sources[creep.memory.harvesting]);
+                }
 	        }
-            var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[creep.memory.harvesting]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[creep.memory.harvesting]);
-            }
-            
-        } else {
+        } else if (creep.carry.energy > creep.carryCapacity * 0.9 && creep.memory.harvesting) {
+            creep.memory.harvesting = false
+        } else if(creep.carry.energy == 0 && creep.memory.harvesting == false) {
+            creep.memory.harvesting = true
+        } else{
             var targets = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
                         return (structure.structureType == STRUCTURE_CONTAINER ||
