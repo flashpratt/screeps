@@ -16,9 +16,6 @@ module.exports = {
         for(var i = 0; i <= currList.length; i++) {
             crpName = "Carrier" + i
             if(crpName in Game.creeps) {
-                if(i == currList.length) {
-                    return
-                }
                 continue;
             } else {
                 break;
@@ -114,7 +111,7 @@ module.exports = {
             crpName = "Miner" + node
         }
         var body = BASIC
-        var toggle = false
+        //var toggle = false
         for(var nrg = Memory.energy1 - 200; nrg > 100;) {
                 body.push(WORK)
                 nrg -= 100
@@ -123,6 +120,9 @@ module.exports = {
             body.push(MOVE)
         }
 		var x = Game.spawns.Spawn1.createCreep([WORK, WORK, CARRY, MOVE], crpName, {role: 'miner', node: (node)})
+		if(_.isString(x)) {
+		    console.log(nrg + " energy left", body + " body", crpName)
+		}
 		this.logError(x, 'miner')
 	},
 	repair: function(currList) {

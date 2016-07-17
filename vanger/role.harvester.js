@@ -23,14 +23,18 @@ var roleHarvester = {
 	                }
 	            } else {
 	                var chest = Game.getObjectById(creep.memory.provider)
-	                if(creep.withdraw(chest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+	                var code = creep.withdraw(chest, RESOURCE_ENERGY)
+	                if(code == ERR_NOT_IN_RANGE) {
 	                    creep.moveTo(chest)
+	                } else if(code == ERR_NOT_ENOUGH_RESOURCES || chest.energy < 10) {
+	                    creep.memory.harvesting = false
+	                    delete creep.memory.provider
 	                }
 	            }
 	        } else {
                 var sources = creep.room.find(FIND_SOURCES);
-                if(creep.harvest(sources[creep.memory.harvesting]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(sources[creep.memory.harvesting]);
+                if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(sources[0]);
                 }
 	        }
         } else if (creep.carry.energy > creep.carryCapacity * 0.9 && creep.memory.harvesting) {

@@ -6,11 +6,11 @@ var roleRepair = require('role.repairer');
 var spawnWorkers = require('spawn');
 var memUpdate = require('memory.update');
 
-var HARVESTERS = 3;
-var UPGRADERS = 3;
+var HARVESTERS = 2;
+var UPGRADERS = 2;
 var BUILDERS = 1;
 var MINERS = 2;
-var REPAIRS = 2;
+var REPAIRS = 1;
 
 Memory.turn = 1
 Memory.pop = 0

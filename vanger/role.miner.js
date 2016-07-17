@@ -12,9 +12,10 @@ var roleMiner = {
 	run: function(creep) {
 		var sources = creep.room.find(FIND_SOURCES)
 		if(creep.carry.energy < creep.carryCapacity) {
-			if(creep.harvest(sources[creep.memory.node]) == ERR_NOT_IN_RANGE){
+		    var harv = creep.harvest(sources[creep.memory.node])
+			if(harv == ERR_NOT_IN_RANGE){
 				creep.moveTo(sources[creep.memory.node]);
-			} else {
+			} else if(harv == OK){
 			    creep.memory.setup = true
 			}
 		}
