@@ -50,6 +50,14 @@ var roleHarvester = {
                                 structure.structureType == STRUCTURE_TOWER) && structure.energy < structure.energyCapacity;
                     }
             });
+            if(targets.length <= 0 || targets == null) {
+                targets = creep.room.find(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.structureType == STRUCTURE_STORAGE)
+                    }
+                })
+            }
+            
             if(targets.length > 0) {
                 var next = creep.pos.findClosestByPath(targets)
                 var err = creep.transfer(next, RESOURCE_ENERGY)

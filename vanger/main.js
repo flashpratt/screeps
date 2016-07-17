@@ -21,11 +21,11 @@ module.exports.loop = function () {
     //Do low-latency map-updates to memory
     switch(Memory.turn) {
         case(1):
-            Memory.energy1 = Game.spawns.Spawn1.room.energyAvailable
             Memory.foundations = Game.spawns.Spawn1.room.find(Game.constructionSites)
             var containers = Game.spawns.Spawn1.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] >= 500)
+                    return (structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] >= 500 || 
+                            structure.structureType == STRUCTURE_STORAGE && structure.store[RESOURCE_ENERGY] >= 500)
                 }
             })
             var array = []
@@ -36,6 +36,7 @@ module.exports.loop = function () {
             break;
         case(2):
             Memory.cs = _.filter(Game.creeps, (creep) => creep.memory.role == 'carrier');
+            Memory.enemies = Game.spawns.Spawn1.room.find(FIND_HOSTILE_CREEPS);
             break;
         case(3):
             Memory.hs = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
@@ -45,6 +46,11 @@ module.exports.loop = function () {
             Memory.rs = _.filter(Game.creeps, (creep) => creep.memory.role == 'repair');
             break;
         case(4):
+            //Update energy available when trying to spawn
+            Memory.energy1 = Game.spawns.Spawn1.room.energyAvailable
+            /*if (Memory.enemies > 0) {
+                //spawnWorkers.defender()
+            }*/
             //Spawn new creeps
             if (Memory.hs.length < HARVESTERS) {
                 if(Memory.ms.length < 1) {
@@ -68,19 +74,6 @@ module.exports.loop = function () {
             }
             break;
         case(5):
-            //Memory.containers
-            //var structures = Game.spawns.Spawn1.room.find(FIND_STRUCTURES)
-            //Memory.containers = _.filter(structures, function(structure) {return (structure.structureType === STRUCTURE_CONTAINER)})
-            //break;
-        //case(6):
-        //    break;
-        //case(7):
-        //    break;
-        //case(8):
-        //    break;
-        //case(9):
-        //    break;
-        //case(10):
             Memory.turn = 0;
             break;
         default:
@@ -92,7 +85,21 @@ module.exports.loop = function () {
 
     //tower AI
     var tower = Game.getObjectById('577ec77ebfcc30e350309403');
+    var tower2 = Game.getObjectById('578bae162b02064e08507ccc');
     if(tower) {
+        /*var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+            filter: (structure) => structure.hits < structure.hitsMax
+        });
+        if(closestDamagedStructure) {
+            tower.repair(closestDamagedStructure);
+        }*/
+
+        var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+        if(closestHostile) {
+            tower.attack(closestHostile);
+        }
+    }
+    if(tower2) {
         /*var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
             filter: (structure) => structure.hits < structure.hitsMax
         });

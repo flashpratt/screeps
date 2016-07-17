@@ -41,6 +41,9 @@ module.exports = {
             nrg -= 50
             body.push(MOVE)
             nrg -= 50
+            if(body.length > 10) {
+                break;
+            }
         }
         if(nrg > 50) {
             body.push(CARRY)
@@ -72,6 +75,9 @@ module.exports = {
                 body.push(MOVE)
                 nrg -= 50
             }
+            if(body.length > 10) {
+                break;
+            }
         }
         
 		var x = Game.spawns.Spawn1.createCreep(body, crpName, {role: 'upgrader'})
@@ -94,6 +100,9 @@ module.exports = {
                 nrg -= 50
             }
             toggle = !toggle
+            if(body.length > 10) {
+                break;
+            }
         }
         if(nrg > 50) {
             body.push(MOVE)
@@ -111,17 +120,21 @@ module.exports = {
             crpName = "Miner" + node
         }
         var body = BASIC
+        var work = 1
         //var toggle = false
         for(var nrg = Memory.energy1 - 200; nrg > 100;) {
                 body.push(WORK)
+                work++;
                 nrg -= 100
+                if(work == 5) {
+                    break;
+                }
         }
         if(nrg > 50) {
             body.push(MOVE)
         }
-		var x = Game.spawns.Spawn1.createCreep([WORK, WORK, CARRY, MOVE], crpName, {role: 'miner', node: (node)})
+		var x = Game.spawns.Spawn1.createCreep(body, crpName, {role: 'miner', node: (node)})
 		if(_.isString(x)) {
-		    console.log(nrg + " energy left", body + " body", crpName)
 		}
 		this.logError(x, 'miner')
 	},
@@ -141,11 +154,14 @@ module.exports = {
                 nrg -= 50
             }
             toggle = !toggle
+            if(body.length > 10) {
+                break;
+            }
         }
         if(nrg > 50) {
             body.push(MOVE)
         }
-		var x = Game.spawns.Spawn1.createCreep([WORK, CARRY, CARRY, MOVE, MOVE], crpName, {role: 'repair', repair: false})
+		var x = Game.spawns.Spawn1.createCreep(body, crpName, {role: 'repair', repair: false})
 		this.logError(x, 'repair')
 	},
 	logError: function(x, role) {
